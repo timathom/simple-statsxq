@@ -6,10 +6,10 @@ xquery version "3.1";
  : Module version:  0.0.1
  : Date:  June 23, 2017
  : License: GPLv3
- : Proprietary XQuery extensions Used: none
+ : Proprietary XQuery extensions used: none
  : XQuery specification: 3.1
- : Module overview:  This module provides a basic set of statistical functions for doing data
- : 									analysis in XQuery.
+ : Module overview:  This module provides a basic set of statistical functions 
+ : for doing data analysis in XQuery.
  : 
  : @author timathom
  : @version 0.0.1
@@ -35,9 +35,10 @@ declare function stats:mean(
  : format the number of decimal places in the result.
  : 
  : @param $nums a sequence of xs:doubles.
- : @param $places an xs:index indicating the number of decimal places to output.
+ : @param $places an xs:integer indicating the number of decimal places to 
+ : output.
  : @return mean of $nums as xs:double, formatted to the number of decimal
- : 				places specified in $places.
+ : places specified in $places.
  :
  :)
 declare function stats:mean(
@@ -45,7 +46,7 @@ declare function stats:mean(
     $places as xs:integer?
 ) as xs:double {     
   stats:format-decimal(
-    sum($nums) div count($nums), $places  
+    stats:mean($nums), $places  
   )
 };
 
