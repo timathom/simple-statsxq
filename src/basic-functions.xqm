@@ -9,10 +9,13 @@ xquery version "3.1";
  : Proprietary XQuery extensions used: none
  : XQuery specification: 3.1
  : Module overview:  This module provides a basic set of statistical functions 
- : for doing data analysis in XQuery.
+ : for doing data analysis in XQuery. Inspired by the Tom MacWright's (@tmcw) 
+ : simple-statistics project for JavaScript.
  : 
- : @author timathom
+ : @author @timathom
  : @version 0.0.1
+ : @see https://github.com/simple-statistics/simple-statistics
+ :
 :)
 
 module namespace stats = "http://bibfram.es/xq/simple-stats/";
@@ -94,6 +97,8 @@ declare function stats:pvar(
  : 
  : @param $num a non-negative xs:double.
  : @return factorial of $num as xs:double.
+ : @error BF0001: "Requires a non-negative value."
+ : @error BF0002: "Requires an integer value as input."
  :
  :)
 declare function stats:fact(
