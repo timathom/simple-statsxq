@@ -16,6 +16,7 @@ xquery version "3.1";
 :)
 
 module namespace stats = "http://bibfram.es/xq/simple-stats/";
+declare namespace math = "http://www.w3.org/2005/xpath-functions/math";
 
 (:~ 
  : Calculates the arithmetic mean of a sequence of numbers.
@@ -47,6 +48,43 @@ declare function stats:mean(
 ) as xs:double {     
   stats:format-decimal(
     stats:mean($nums), $places  
+  )
+};
+
+(:~ 
+ : Calculates the variance of a population.
+ :
+ : @param $nums a sequence of xs:doubles.
+ : @return variance of $nums as xs:double.
+ :
+ :)
+declare function stats:pvar(
+  $nums as xs:double+
+) as xs:double {
+  sum(
+    for $n in $nums return math:pow(($n - stats:mean($nums)), 2)    
+  ) div count($nums)
+};
+
+(:~ 
+ : Calculates the variance of a population, with an option to
+ : format the number of decimal places in the result.
+ :
+ : @param $nums a sequence of xs:doubles.
+ : @param $places an xs:integer indicating the number of decimal places to 
+ : output.
+ : @return variance of $nums as xs:double, formatted to the number of decimal
+ : places specified in $places.
+ :
+ :)
+declare function stats:pvar(
+  $nums as xs:double+,
+  $places as xs:integer
+) as xs:double {
+  stats:format-decimal(
+    sum(
+      for $n in $nums return math:pow(($n - stats:mean($nums)), 2)    
+    ) div count($nums), $places
   )
 };
 

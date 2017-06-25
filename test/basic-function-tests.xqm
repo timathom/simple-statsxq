@@ -6,7 +6,7 @@ import module namespace stats = "http://bibfram.es/xq/simple-stats/"
   at "../src/basic-functions.xqm";
   
 (:~  
-:  Test the result of stats:mean#1 with a sequence of numbers. 
+:  stats:mean#1 with a sequence of numbers. 
 :)
 declare %unit:test function test:mean-1() {
   unit:assert-equals(
@@ -15,7 +15,7 @@ declare %unit:test function test:mean-1() {
 };
 
 (:~  
-:  Test the result of stats:mean#2 with a sequence of numbers and decimal
+:  stats:mean#2 with a sequence of numbers and decimal
 :  formatting. 
 :)
 declare %unit:test function test:mean-2() {
@@ -23,9 +23,28 @@ declare %unit:test function test:mean-2() {
     stats:mean((1, 2, 3.14159, 4, 5.5), 2), 3.13
   )
 };
+
+(:~ 
+ : stats:pvar#1 (population variance) with a sequence of numbers.
+ :)
+declare %unit:test function test:pvar-1() {
+  unit:assert-equals(
+    stats:pvar((1, 2, 3, 4, 5.5)), 2.44
+  )
+};
+
+(:~ 
+ : stats:pvar#2 (population variance) with a sequence of numbers and decimal 
+ : formatting.
+ :)
+declare %unit:test function test:pvar-2() {
+  unit:assert-equals(
+    stats:pvar((1, 2, 3, 4, 5.5), 1), 2.4
+  )
+};
  
 (:~  
-:  Test the result of stats:fact() with 0 as input. 
+:  stats:fact() with 0 as input. 
 :)
 declare %unit:test function test:factorial-0() {
   unit:assert-equals(
@@ -34,7 +53,7 @@ declare %unit:test function test:factorial-0() {
 };
 
 (:~  
-:  Test the result of stats:fact() with 20 as input. 
+:  stats:fact() with 20 as input. 
 :)
 declare %unit:test function test:factorial-20() {
   unit:assert-equals(
@@ -43,7 +62,7 @@ declare %unit:test function test:factorial-20() {
 };
 
 (:~  
-:  Test the result of stats:fact() with 100 as input. 
+:  stats:fact() with 100 as input. 
 :)
 declare %unit:test function test:factorial-100() {
   unit:assert-equals(
@@ -52,7 +71,7 @@ declare %unit:test function test:factorial-100() {
 };
 
 (:~  
-:  Test the result of stats:format for decimal formatting. 
+:  stats:format for decimal formatting. 
 :)
 declare %unit:test function test:format-decimal() {
   unit:assert-equals(
