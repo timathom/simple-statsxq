@@ -17,6 +17,7 @@ xquery version "3.1";
 
 module namespace stats = "http://bibfram.es/xq/simple-stats/";
 declare namespace math = "http://www.w3.org/2005/xpath-functions/math";
+declare namespace errs = "http://bibfram.es/xq/simple-stats/errs/";
 
 (:~ 
  : Calculates the arithmetic mean of a sequence of numbers.
@@ -98,7 +99,13 @@ declare function stats:pvar(
 declare function stats:fact(
   $num as xs:double
 ) as xs:double {  
-  if (empty($num) or $num le 1) then 1 else $num * stats:fact($num - 1)
+  if (empty($num) or $num lt 0) 
+  then error(xs:QName("errs:BF0001"), "Requires a non-negative value.")
+  else if (floor($num) ne $num)
+    then error(xs:QName("errs:BF0002"), "Requires an integer value as input.")
+    else if ($num le 1) 
+      then 1 
+      else $num * stats:fact($num - 1)
 };
 
 (:~ 
