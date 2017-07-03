@@ -75,8 +75,8 @@ declare function prob:cdf(
     let $count := $counter($nums)    
     return (              
       map {
-        "values": array { for $c in $count/* return xs:double($c/@n) },
-        "counts": array { for $c in $count/* return xs:integer($c) },
+        "values": array { $count/* ! xs:double(@n) },
+        "counts": array { $count/* ! xs:integer(.) },
         "probs": array {
           for $c at $p in $count/*
           return 
