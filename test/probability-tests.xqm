@@ -16,7 +16,7 @@ import module namespace prob = "http://bibfram.es/xq/simple-stats/prob/"
 declare 
   %unit:test("expected", "err:XPTY0004") 
 function test:cdf-empty() {
-    prob:cdf((), (), ())
+    prob:cdf((), ())
 };
 
 (:~ 
@@ -27,11 +27,17 @@ function test:cdf-empty() {
 declare
   %unit:test
 function test:cdf-total() {
-  let $nums :=
-     (-0.1412, 0.6152, 0.6852, 2.2946, 3.2791, 3.4699, 
-      3.6961, 4.2375, 4.4977, 5.3756)
+  let $nums := 
+    (-0.1412, 0.6152, 0.6852, 2.2946, 3.2791, 3.4699, 
+    3.6961, 4.2375, 4.4977, 5.3756),
+  $cdf := prob:cdf(basic:counter#1, $nums) => parse-json()
   return
-    prob:cdf(basic:counter#1, $nums)
+    unit:assert(
+      if (count($cdf("values")) eq count($cdf("counts"))
+          and $cdf?("probs")?(array:size($cdf?("probs"))) eq 1)
+      then true()
+      else false()  
+    )    
 };
 
 (:~ 
@@ -40,17 +46,6 @@ function test:cdf-total() {
 declare
   %unit:test
 function test:cdf-value() {
-  unit:assert(
-    let $nums :=
-      (-0.1412, 0.6152, 0.6852, 2.2946, 3.2791, 3.4699, 
-      3.6961, 4.2375, 4.4977, 5.3756),    
-    $cdf := prob:cdf(basic:counter#1, $nums)
-    return (
-      if (count($cdf("values")) eq count($cdf("counts"))
-            and $cdf?("counts")?(array:size($cdf?("counts"))) eq 1)
-      then true()
-      else false()
-    )            
-  )  
+  (: pass :)
 };
 

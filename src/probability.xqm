@@ -35,13 +35,13 @@ import module namespace basic = "http://bibfram.es/xq/simple-stats/basic/"
  : @error err:XPTY0004: "Cannot promote empty-sequence() to xs:double+."
  :
  :)
-declare function prob:cdf(
+(: declare function prob:cdf(
   $counter as function(xs:double+) as element(counter),
   $nums as xs:double+,
   $value as xs:double
 ) as xs:double {  
   if (empty($nums)) 
-  then () (: static error :)
+  then () 
   else (
     let $count := $counter($nums),    
     $v := $count/count[@n = $value]
@@ -53,40 +53,36 @@ declare function prob:cdf(
       ) + $v
     ) div count($count/*)
   )
-};
+}; :)
 
 (:~ 
  : The cumulative distribution function (CDF). Given a sequence of values, 
  : returns the CDF for the complete distribution of values.
  : 
  : @param $nums a sequence of xs:doubles.
- : @return CDF of $nums as a sequence of xs:doubles.
+ : @return CDF as JSON object containing three arrays: "values," "counts,"
+ : and "probs."
  : @error err:XPTY0004: "Cannot promote empty-sequence() to xs:double+."
  :
  :)
 declare function prob:cdf(
   $counter as function(xs:double+) as element(counter),
   $nums as xs:double+
-) as map(*) {  
+) as xs:string {  
   if (empty($nums)) 
   then () (: static error :)
   else (
     let $count := $counter($nums)    
-    return (       
+    return (              
       map {
-        "values":
-          array {       
-            for $c at $p in $count/*        
-            return 
-              xs:double($c/@n)            
-          },
-        "counts":
-        array {       
-          for $c at $p in $count/*        
+        "values": array { for $c in $count/* return xs:double($c/@n) },
+        "counts": array { for $c in $count/* return xs:integer($c) },
+        "probs": array {
+          for $c at $p in $count/*
           return 
-            ($c + sum($count/*[position() lt $p])) div sum($count/*)            
-        }
-      }
+            ($c + sum($count/*[position() lt $p])) div sum($count/*)
+        }                     
+      } => serialize(map {"method": "json"})                      
     )                 
   ) 
 };
