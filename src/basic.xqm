@@ -2,7 +2,7 @@ xquery version "3.1";
 
 (:~ 
  :
- : Module name:  Simple StatsXQ
+ : Module name:  Simple StatsXQ Basic
  : Module version:  0.0.1
  : Date:  June 23, 2017
  : License: GPLv3
@@ -20,7 +20,29 @@ xquery version "3.1";
 
 module namespace basic = "http://bibfram.es/xq/simple-stats/basic/";
 declare namespace math = "http://www.w3.org/2005/xpath-functions/math";
+declare namespace err = "http://www.w3.org/2005/xqt-errors";
 declare namespace errs = "http://bibfram.es/xq/simple-stats/errs/";
+
+
+(:~ 
+ : 
+ : Constructs a counter object from a sequence of values, with a corresponding
+ : frequency count for each distinct value:
+ : 
+ : @param $nums as sequence of xs:doubles
+ : @return counter as element(counter)
+ :
+ :)
+declare function basic:counter(
+  $nums as xs:double+
+) as element(counter) {
+  <counter>{
+    for $n in distinct-values($nums)
+    order by $n
+    return
+      <count n="{$n}">{ count(index-of($nums, $n)) }</count>
+  }</counter>
+};
 
 (:~ 
  : Calculates the factorial of a non-negative integer.
