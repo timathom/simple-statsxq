@@ -13,11 +13,9 @@ import module namespace basic = "http://bibfram.es/xq/simple-stats/basic/"
 declare
   %unit:test
 function test:counter() {
-  let $nums :=
-     (-0.1412, 0.6152, 0.6852, 0.6852, 0.6852, 2.2946, 2.2946, 3.2791, 3.4699, 
-      3.6961, 4.2375, 4.4977, 5.3756)
-  $counter := 
-    basic:counter($nums)
+  let $nums := (-0.1412, 0.6152, 0.6852, 0.6852, 0.6852, 2.2946, 2.2946, 3.2791,
+    3.4699, 3.6961, 4.2375, 4.4977, 5.3756),
+  $counter := basic:counter($nums)
   return
     unit:assert(
       $counter/count/@n[xs:double(.) = 2.2946][xs:integer(..) eq 2]

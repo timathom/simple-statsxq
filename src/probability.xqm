@@ -66,8 +66,8 @@ import module namespace basic = "http://bibfram.es/xq/simple-stats/basic/"
  :
  :)
 declare function prob:cdf(
-  $counter as function(xs:double+) as element(counter),
-  $nums as xs:double+
+  $counter as function(xs:numeric+) as element(counter),
+  $nums as xs:numeric+
 ) as xs:string {  
   if (empty($nums)) 
   then () (: static error :)

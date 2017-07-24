@@ -34,7 +34,7 @@ declare namespace errs = "http://bibfram.es/xq/simple-stats/errs/";
  :
  :)
 declare function basic:counter(
-  $nums as xs:double+
+  $nums as xs:numeric+
 ) as element(counter) {
   <counter>{
     for $n in distinct-values($nums)
@@ -54,7 +54,7 @@ declare function basic:counter(
  :
  :)
 declare function basic:fact(
-  $num as xs:double
+  $num as xs:numeric
 ) as xs:double {  
   if (empty($num) or $num lt 0) 
   then error(xs:QName("errs:BF0001"), "Requires a non-negative value.")
@@ -74,7 +74,7 @@ declare function basic:fact(
  :
  :)
 declare function basic:format-decimal(
-  $num as xs:double,
+  $num as xs:numeric,
   $places as xs:integer
 ) as xs:double {
   let $zeros as xs:string := 
@@ -95,7 +95,7 @@ declare function basic:format-decimal(
  :
  :)
 declare function basic:mean(
-    $nums as xs:double+
+    $nums as xs:numeric+
 ) as xs:double {     
   sum($nums) div count($nums)      
 };
@@ -112,7 +112,7 @@ declare function basic:mean(
  :
  :)
 declare function basic:mean(
-    $nums as xs:double+,
+    $nums as xs:numeric+,
     $places as xs:integer?
 ) as xs:double {     
   basic:format-decimal(
@@ -128,7 +128,7 @@ declare function basic:mean(
  :
  :)
 declare function basic:pvar(
-  $nums as xs:double+
+  $nums as xs:numeric+
 ) as xs:double {
   sum(
     for $n in $nums return math:pow(($n - basic:mean($nums)), 2)    
@@ -147,7 +147,7 @@ declare function basic:pvar(
  :
  :)
 declare function basic:pvar(
-  $nums as xs:double+,
+  $nums as xs:numeric+,
   $places as xs:integer
 ) as xs:double {
   basic:format-decimal(
