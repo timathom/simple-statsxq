@@ -21,7 +21,7 @@ function test:cdf-empty() {
 
 (:~ 
  :
- :prob:cdf#2 with a sequence of xs:doubles 
+ :  prob:cdf#2 with a sequence of xs:doubles 
  :
  :)
 declare
@@ -34,7 +34,7 @@ function test:cdf-total() {
   return
     unit:assert(
       if (count($cdf("values")) eq count($cdf("counts"))
-          and $cdf?("probs")?(array:size($cdf?("probs"))) eq 1)
+            and $cdf?("probs")?(array:size($cdf?("probs"))) eq 1)
       then true()
       else false()  
     )    
