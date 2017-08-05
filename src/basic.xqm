@@ -120,7 +120,21 @@ declare function basic:mean(
   )
 };
 
-(:~ 
+(:~
+ : Calculates the product of a sequece of xs:numerics
+ :
+ : @param $nums a sequence of xs:numerics
+ : @return product of $nums as xs:numeric
+ :)
+declare function basic:product(
+  $nums as xs:numeric+
+) as xs:numeric {
+  let $n := $nums
+  return
+    fold-left($n, 1, function($a, $b) { $a * $b })
+};
+
+(:~
  : Calculates the variance of a population.
  :
  : @param $nums a sequence of xs:doubles.
