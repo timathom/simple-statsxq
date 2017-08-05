@@ -170,3 +170,23 @@ declare function basic:pvar(
     ) div count($nums), $places
   )
 };
+
+(:~
+ : Calculates the quantile of a sequence of xs:numerics.
+ :
+ : @param $nums a sequence of xs:numerics.
+ : @param $q the desired quantile, as an xs:double between 0 and 1.
+ : @return $quantile as xs:numeric.
+ :)
+declare function basic:quantile(
+  $nums as xs:numeric+,
+  $q as xs:double
+) as xs:numeric {
+  let $sorted-nums := for $i in $nums
+                      order by fn:number($i)
+                      return $i
+  let $count-nums := fn:count($nums)
+  let $rounded := fn:round(($count-nums + 1) * $q)
+  return
+    $sorted-nums[position() = $rounded]
+};
