@@ -121,10 +121,10 @@ declare function basic:mean(
 };
 
 (:~
- : Calculates the product of a sequece of xs:numerics
+ : Calculates the product of a sequece of xs:numerics.
  :
- : @param $nums a sequence of xs:numerics
- : @return product of $nums as xs:numeric
+ : @param $nums a sequence of xs:numerics.
+ : @return product of $nums as xs:numeric.
  :)
 declare function basic:product(
   $nums as xs:numeric+
@@ -170,5 +170,3 @@ declare function basic:pvar(
     ) div count($nums), $places
   )
 };
-
-
