@@ -175,14 +175,14 @@ declare function basic:pvar(
  : Calculates the quantile of a sorted sequence of xs:numerics.
  :
  : @param $nums a sequence of xs:numerics.
- : @param $q the desired quantile, as an xs:double between 0 and 1.
+ : @param $q the desired quantile(s), as a sequence of xs:doubles between 0 and 1.
  : @error BF0003 "Requires at least one numeric value."
  : @error BF0004 "Requires a value between 0 and 1"
  : @return $quantile as xs:numeric.
  :)
 declare function basic:quantile(
   $nums as xs:numeric+,
-  $q as xs:double
+  $q as xs:double+
 ) as xs:numeric {
   if (fn:empty($nums) or $nums lt 0)
   then fn:error(xs:QName("errs:BF0003"), "Requires at least one numeric value.")
