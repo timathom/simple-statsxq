@@ -172,21 +172,32 @@ declare function basic:pvar(
 };
 
 (:~
- : Calculates the quantile of a sequence of xs:numerics.
+ : Calculates the quantile of a sorted sequence of xs:numerics.
  :
  : @param $nums a sequence of xs:numerics.
  : @param $q the desired quantile, as an xs:double between 0 and 1.
+ : @error BF0003 "Requires at least one numeric value."
+ : @error BF0004 "Requires a value between 0 and 1"
  : @return $quantile as xs:numeric.
  :)
 declare function basic:quantile(
   $nums as xs:numeric+,
   $q as xs:double
 ) as xs:numeric {
-  let $sorted-nums := for $i in $nums
-                      order by fn:number($i)
-                      return $i
-  let $count-nums := fn:count($nums)
-  let $rounded := fn:round(($count-nums + 1) * $q)
-  return
-    $sorted-nums[position() = $rounded]
+  if (fn:empty($nums) or $nums lt 0)
+  then fn:error(xs:QName("errs:BF0003"), "Requires at least one numeric value.")
+  else if (fn:empty($q) or ($q lt 0 or $q gt 1))
+    then fn:error(xs:QName("errs:BF0004"), "Requires a value between 0 and 1.")
+    else let $sorted-nums := for $i in $nums
+                             order by fn:number($i)
+                             return $i
+      let $count-nums := fn:count($nums)
+      let $rounded := fn:round(($count-nums + 1) * $q)
+      return (
+        if ($q = 1)
+        then (fn:max($sorted-nums))
+        else if ($q = 0)
+          then (fn:min($sorted-nums))
+          else ('placeholder')
+  )
 };
