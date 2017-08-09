@@ -108,7 +108,7 @@ function test:mean-2() {
 };
 
 (:~
- : basic:product with a sequence of integers.
+ : basic:product with a sequence of integers
  :)
 declare
   %unit:test
@@ -119,7 +119,7 @@ function test:product-1() {
 };
 
 (:~
- : basic:product with a sequence of xs:numerics.
+ : basic:product with a sequence of xs:numerics
  :)
 declare
   %unit:test
@@ -149,5 +149,27 @@ declare
 function test:pvar-2() {
   unit:assert-equals(
     basic:pvar((1, 2, 3, 4, 5.5), 1), 2.4
+  )
+};
+
+(:~
+ : basic:quantile with a single quantile value
+ :)
+declare
+  %unit:test
+function test:quantile-1() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20), .5), 9
+  )
+};
+
+(:~
+ : basic:quantile with multiple quantile values
+ :)
+declare
+  %unit:test
+function test:quantile-2() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20), (.25, .5, .75)), (7, 9, 15)
   )
 };
