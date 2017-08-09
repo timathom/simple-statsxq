@@ -182,22 +182,24 @@ declare function basic:pvar(
  :)
 declare function basic:quantile(
   $nums as xs:numeric+,
-  $q as xs:double+
+  $qs as xs:double+
 ) as xs:numeric {
-  if (fn:empty($nums) or $nums lt 0)
+  (: verify $nums is not empty :)
+  if (fn:empty($nums) or fn:count($nums) lt 0)
   then fn:error(xs:QName("errs:BF0003"), "Requires at least one numeric value.")
-  else if (fn:empty($q) or ($q lt 0 or $q gt 1))
-    then fn:error(xs:QName("errs:BF0004"), "Requires a value between 0 and 1.")
+  (: verify that each quantile (qi) in the quantiles sequence (qs) is not empty or gt/lt 1/0 :)
+  else if ((some $qi in $qs satisfies (fn:not(fn:empty($qi)))) or
+           (some $qi in $qs satisfies (fn:not($qi lt 0 or $qi gt 1))))
+    then fn:error(QName("errs:BF0004"), "Requires a value between 0 and 1.")
+    (: process our nums :)
     else let $sorted-nums := for $i in $nums
                              order by fn:number($i)
                              return $i
-      let $count-nums := fn:count($nums)
-      let $rounded := fn:round(($count-nums + 1) * $q)
-      return (
-        if ($q = 1)
-        then (fn:max($sorted-nums))
-        else if ($q = 0)
-          then (fn:min($sorted-nums))
-          else ('placeholder')
-  )
+    let $count-nums := fn:count($nums)
+    for $q in $qs
+    let $rounded := fn:round(($count-nums + 1) * $q)
+    let $res := $sorted-nums[fn:position() = $rounded]
+    return (
+      fn:string-join($sorted-nums[fn:position() = $rounded], ', ')
+    )
 };
