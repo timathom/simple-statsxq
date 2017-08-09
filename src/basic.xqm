@@ -190,7 +190,7 @@ declare function basic:quantile(
   (: verify that each quantile (qi) in the quantiles sequence (qs) is not empty or gt/lt 1/0 :)
   else if ((some $qi in $qs satisfies (fn:not(fn:empty($qi)))) or
            (some $qi in $qs satisfies (fn:not($qi lt 0 or $qi gt 1))))
-    then fn:error(QName("errs:BF0004"), "Requires a value between 0 and 1.")
+    then fn:error(xs:QName("errs:BF0004"), "Requires a value between 0 and 1.")
     (: process our nums :)
     else let $sorted-nums := for $i in $nums
                              order by fn:number($i)
