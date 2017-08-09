@@ -107,6 +107,28 @@ function test:mean-2() {
   )
 };
 
+(:~
+ : basic:product with a sequence of integers.
+ :)
+declare
+  %unit:test
+function test:product-1() {
+  unit:assert-equals(
+    basic:product((1, 2, 3, 4)), 24
+  )
+};
+
+(:~
+ : basic:product with a sequence of xs:numerics.
+ :)
+declare
+  %unit:test
+function test:product-2() {
+  unit:assert-equals(
+    basic:product((1, 2.1, 0.3, 4.39)), 2.7657
+  )
+};
+
 (:~ 
  : basic:pvar#1 (population variance) with a sequence of numbers
  :)
