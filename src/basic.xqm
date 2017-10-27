@@ -194,13 +194,11 @@ declare function basic:quantile(
     else let $sorted-nums := for $i in $nums
                              order by fn:number($i)
                              return $i
-    for $q in $qs
     let $count-nums := fn:count($nums)
-    let $mid := fn:ceiling($count-nums div 2)
+    for $q in $qs
     let $rounded := fn:round(($count-nums + 1) * $q)
+    let $res := $sorted-nums[fn:position() = $rounded]
     return (
-      if ($count-nums mod 2 eq 0)
-      then (fn:avg(fn:subsequence($sorted-nums, $mid, 2)))
-      else ($sorted-nums[$mid])
+      $sorted-nums[fn:position() = $rounded]
     )
 };
