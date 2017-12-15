@@ -199,6 +199,10 @@ declare function basic:quantile(
     let $rounded := fn:round(($count-nums + 1) * $q)
     let $res := $sorted-nums[fn:position() = $rounded]
     return (
-      $sorted-nums[fn:position() = $rounded]
+      if ($q = 0)
+      then ($sorted-nums[1])
+        else if ($q = 1)
+          then ($sorted-nums[fn:last()])
+            else $sorted-nums[fn:position() = $rounded]
     )
 };
