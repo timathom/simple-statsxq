@@ -173,3 +173,14 @@ function test:quantile-2() {
     basic:quantile((3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20), (.25, .5, .75)), (7, 9, 15)
   )
 };
+
+(:~ 
+ : basic:quantile with multiple quantile values, part ii
+ :)
+declare
+  %unit:test
+function test:quantile-3() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 9), (0, .5, 1)), (3, 7, 9)
+  )
+};
