@@ -107,6 +107,28 @@ function test:mean-2() {
   )
 };
 
+(:~
+ : basic:product with a sequence of integers
+ :)
+declare
+  %unit:test
+function test:product-1() {
+  unit:assert-equals(
+    basic:product((1, 2, 3, 4)), 24
+  )
+};
+
+(:~
+ : basic:product with a sequence of xs:numerics
+ :)
+declare
+  %unit:test
+function test:product-2() {
+  unit:assert-equals(
+    basic:product((1, 2.1, 0.3, 4.39)), 2.7657
+  )
+};
+
 (:~ 
  : basic:pvar#1 (population variance) with a sequence of numbers
  :)
@@ -127,5 +149,38 @@ declare
 function test:pvar-2() {
   unit:assert-equals(
     basic:pvar((1, 2, 3, 4, 5.5), 1), 2.4
+  )
+};
+
+(:~
+ : basic:quantile with a single quantile value
+ :)
+declare
+  %unit:test
+function test:quantile-1() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20), .5), 9
+  )
+};
+
+(:~
+ : basic:quantile with multiple quantile values
+ :)
+declare
+  %unit:test
+function test:quantile-2() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20), (.25, .5, .75)), (7, 9, 15)
+  )
+};
+
+(:~ 
+ : basic:quantile with multiple quantile values, part ii
+ :)
+declare
+  %unit:test
+function test:quantile-3() {
+  unit:assert-equals(
+    basic:quantile((3, 6, 7, 8, 9), (0, .5, 1)), (3, 7, 9)
   )
 };

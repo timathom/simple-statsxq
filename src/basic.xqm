@@ -120,7 +120,21 @@ declare function basic:mean(
   )
 };
 
-(:~ 
+(:~
+ : Calculates the product of a sequece of xs:numerics.
+ :
+ : @param $nums a sequence of xs:numerics.
+ : @return product of $nums as xs:numeric.
+ :)
+declare function basic:product(
+  $nums as xs:numeric+
+) as xs:numeric {
+  let $n := $nums
+  return
+    fold-left($n, 1, function($a, $b) { $a * $b })
+};
+
+(:~
  : Calculates the variance of a population.
  :
  : @param $nums a sequence of xs:doubles.
@@ -157,4 +171,35 @@ declare function basic:pvar(
   )
 };
 
-
+(:~
+ : Calculates the quantile of a sorted sequence of xs:numerics.
+ :
+ : @param $nums a sequence of xs:numerics.
+ : @param $q the desired quantile(s), as a sequence of xs:doubles between 0 and 1.
+ : @error BF0003 "Requires at least one numeric value."
+ : @error BF0004 "Requires a value between 0 and 1"
+ : @return $quantile as xs:numeric.
+ :)
+declare function basic:quantile(
+  $nums as xs:numeric+,
+  $qs as xs:numeric+
+) as xs:numeric+ {
+  if (fn:empty($nums))
+  then fn:error(xs:QName("errs:BF0003"), "Requires at least one numeric value.")
+  else if (fn:not(every $qi in $qs satisfies (fn:not(fn:empty($qi)) and ($qi gt 0 or $qi lt 1))))
+    then fn:error(xs:QName("errs:BF0004"), "Requires a value between 0 and 1.")
+    else let $sorted-nums := for $i in $nums
+                             order by fn:number($i)
+                             return $i
+    let $count-nums := fn:count($nums)
+    for $q in $qs
+    let $rounded := fn:round(($count-nums + 1) * $q)
+    let $res := $sorted-nums[fn:position() = $rounded]
+    return (
+      if ($q = 0)
+      then ($sorted-nums[1])
+        else if ($q = 1)
+          then ($sorted-nums[fn:last()])
+            else $sorted-nums[fn:position() = $rounded]
+    )
+};
